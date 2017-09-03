@@ -3,4 +3,7 @@
     <string name="hint">phrase to translate</string>
     <string name="translate">translate</string>
     <string name="error">Something went wrong</string>
+    <string name="en_ru">en-ru</string>
+    <string name="ru_en">ru-en</string>
+    <string name="translate_ru">Перевести</string>
 </resources>

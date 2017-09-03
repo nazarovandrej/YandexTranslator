@@ -1,5 +1,6 @@
 package com.github.andrejnazarov.yandextranslator.model;
 
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 
 import com.github.andrejnazarov.yandextranslator.TranslationService;
@@ -22,7 +23,9 @@ import retrofit2.Response;
 public class MainModel {
 
     private static final String KEY = "trnsl.1.1.20170426T135336Z.48d648f8f882d563.d40bb959b17363f2bee9e4a816f36ca997ce55c2";
-    private static final String LANG = "en-ru";
+    private static final String LANG_DEFAULT = "en-ru";
+    private static final String LANG_RU_EN = "ru-en";
+    private static final String LANG = "lang";
     private static final String FORMAT = "plain";
     private static final String OPTIONS = "1";
 
@@ -31,14 +34,25 @@ public class MainModel {
     @Inject
     TranslationService mService;
 
+    @Inject
+    SharedPreferences mPreferences;
+
     public MainModel(MainPresenter mainPresenter) {
         TranslatorApp.getNetComponent().inject(this);
         mMainPresenter = mainPresenter;
     }
 
+    public void setLang(boolean isEnRu) {
+        SharedPreferences.Editor editor = mPreferences.edit();
+        editor.putBoolean(LANG, isEnRu);
+        editor.apply();
+        mMainPresenter.showDefaultLanguageChecked(isEnRu);
+    }
+
     public void processTranslation(String sourceText) {
         mMainPresenter.showProgress();
-        Call<TranslationBean> beanCall = mService.getTranslation(KEY, sourceText, LANG, FORMAT, OPTIONS);
+        String lang = isDefaultLanguageChecked() ? LANG_DEFAULT : LANG_RU_EN;
+        Call<TranslationBean> beanCall = mService.getTranslation(KEY, sourceText, lang, FORMAT, OPTIONS);
         beanCall.enqueue(new Callback<TranslationBean>() {
             @Override
             public void onResponse(@NonNull Call<TranslationBean> call, @NonNull Response<TranslationBean> response) {
@@ -63,5 +77,11 @@ public class MainModel {
                 mMainPresenter.showError();
             }
         });
+    }
+
+    public boolean isDefaultLanguageChecked() {
+        boolean isDefaultChecked = mPreferences.getBoolean(LANG, true);
+        mMainPresenter.changeLanguage(isDefaultChecked);
+        return isDefaultChecked;
     }
 }

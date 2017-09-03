@@ -14,5 +14,11 @@ public interface MainPresenter {
 
     void showTranslation(String translatedText);
 
+    void showDefaultLanguageChecked(boolean checked);
+
+    void getLanguage();
+
     void processTranslation(String sourceText);
+
+    void changeLanguage(boolean isEnRu);
 }
