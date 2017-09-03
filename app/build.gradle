@@ -41,8 +41,8 @@ dependencies {
     })
 
     //ButterKnife
-    compile 'com.jakewharton:butterknife:8.0.1'
-    apt 'com.jakewharton:butterknife-compiler:8.0.1'
+    compile 'com.jakewharton:butterknife:8.4.0'
+    apt 'com.jakewharton:butterknife-compiler:8.4.0'
 
     //Jackson
     compile(
@@ -54,6 +54,11 @@ dependencies {
     //Retrofit2
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
     compile 'com.squareup.retrofit2:converter-jackson:2.3.0'
+
+    //Dagger2
+    compile "com.google.dagger:dagger:2.9"
+    apt "com.google.dagger:dagger-compiler:2.9"
+    provided 'javax.annotation:jsr250-api:1.0'
 
     //Guava
     compile group: 'com.google.guava', name: 'guava', version: '20.0'

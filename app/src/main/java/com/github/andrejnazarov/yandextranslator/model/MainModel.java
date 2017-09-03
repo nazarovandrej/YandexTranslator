@@ -2,11 +2,14 @@ package com.github.andrejnazarov.yandextranslator.model;
 
 import android.support.annotation.NonNull;
 
-import com.github.andrejnazarov.yandextranslator.ApiClient;
+import com.github.andrejnazarov.yandextranslator.TranslationService;
+import com.github.andrejnazarov.yandextranslator.TranslatorApp;
 import com.github.andrejnazarov.yandextranslator.bean.TranslationBean;
 import com.github.andrejnazarov.yandextranslator.presenter.MainPresenter;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -24,16 +27,18 @@ public class MainModel {
     private static final String OPTIONS = "1";
 
     private final MainPresenter mMainPresenter;
-    private final ApiClient mApiClient;
 
-    public MainModel(MainPresenter mainPresenter, ApiClient apiClient) {
+    @Inject
+    TranslationService mService;
+
+    public MainModel(MainPresenter mainPresenter) {
+        TranslatorApp.getNetComponent().inject(this);
         mMainPresenter = mainPresenter;
-        mApiClient = apiClient;
     }
 
     public void processTranslation(String sourceText) {
         mMainPresenter.showProgress();
-        Call<TranslationBean> beanCall = mApiClient.getTranslationService().getTranslation(KEY, sourceText, LANG, FORMAT, OPTIONS);
+        Call<TranslationBean> beanCall = mService.getTranslation(KEY, sourceText, LANG, FORMAT, OPTIONS);
         beanCall.enqueue(new Callback<TranslationBean>() {
             @Override
             public void onResponse(@NonNull Call<TranslationBean> call, @NonNull Response<TranslationBean> response) {
