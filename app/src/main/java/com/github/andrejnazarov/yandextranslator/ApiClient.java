@@ -9,19 +9,19 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 
 public class ApiClient {
 
+    public static final String KEY = "trnsl.1.1.20170426T135336Z.48d648f8f882d563.d40bb959b17363f2bee9e4a816f36ca997ce55c2";
     private static final String BASE_URL = "https://translate.yandex.net/";
 
-    private static Retrofit sRetrofit = null;
+    private TranslationService mService;
 
-    public static TranslationService getTranslationService() {
-        TranslationService service = null;
-        if (sRetrofit == null) {
-            sRetrofit = new Retrofit.Builder()
+    public TranslationService getTranslationService() {
+        if (mService == null) {
+            Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
                     .addConverterFactory(JacksonConverterFactory.create())
                     .build();
-            service = sRetrofit.create(TranslationService.class);
+            mService = retrofit.create(TranslationService.class);
         }
-        return service;
+        return mService;
     }
 }
